@@ -19,6 +19,7 @@ library(here)
 library(tidyverse)
 library(lubridate)
 library(timeDate)
+library(resample)
 
 theme_set(theme_bw())
 ```
@@ -111,5 +112,48 @@ data %>%
              fill=file_extension)) + 
   geom_boxplot() +
   ggtitle("Python vs Java on the weekends")
+```
+
+```{r}
+data %>%
+  filter(file_extension == "java") %>%
+  filter(!isWeekend) %>%
+  bootstrap(median(users), R = 10000) %>% 
+    CI.percentile(probs = c(.025, .975)) -> java.week
+data %>%
+  filter(file_extension == "java") %>%
+  filter(isWeekend) %>%
+  bootstrap(median(users), R = 10000) %>% 
+    CI.percentile(probs = c(.025, .975)) -> java.weekend
+
+cat(paste("Java on week days:\n"))
+java.week
+cat(paste("\n\nJava on weekend days:\n"))
+java.weekend
+```
+
+```{r}
+data %>%
+  filter(file_extension == "py") %>%
+  filter(!isWeekend) %>%
+  bootstrap(median(users), R = 10000) %>% 
+    CI.percentile(probs = c(.025, .975)) -> python.week
+data %>%
+  filter(file_extension == "py") %>%
+  filter(isWeekend) %>%
+  bootstrap(median(users), R = 10000) %>% 
+    CI.percentile(probs = c(.025, .975)) -> python.weekend
+
+cat(paste("Python on week days:\n"))
+python.week
+cat(paste("\n\nPython on weekend days:\n"))
+python.weekend
+```
+
+```{r}
+cat(paste("Java on weekend days:\n"))
+java.weekend
+cat(paste("\n\nPython on weekend days:\n"))
+python.weekend
 ```
 
