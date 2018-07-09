@@ -2,11 +2,11 @@
 title: "Análise de commits no Github"
 author: "José Benardi de Souza Nunes"
 output:
-  html_notebook:
-    toc: yes
-    toc_float: yes
   html_document:
     df_print: paged
+    toc: yes
+    toc_float: yes
+  html_notebook:
     toc: yes
     toc_float: yes
 ---
@@ -99,7 +99,7 @@ data %>%
 
 ## Inference on two samples
 
-```{r}
+```{r, results='hold'}
 data %>%
   filter(file_extension == "java") %>%
   filter(!isWeekend) %>%
@@ -171,7 +171,7 @@ data %>%
 
 ## Inference on two samples
 
-```{r}
+```{r, results='hold'}
 data %>%
   filter(file_extension == "py") %>%
   filter(!isWeekend) %>%
@@ -188,6 +188,7 @@ python.week
 cat(paste("\n\nPython on weekend days:\n"))
 python.weekend
 ```
+
 
 ```{r}
 df = data.frame(rbind(python.week, 
@@ -242,7 +243,7 @@ data %>%
 
 ## Inference on two samples
 
-```{r}
+```{r, results='hold'}
 cat(paste("Java on weekend days:\n"))
 java.weekend
 cat(paste("\n\nPython on weekend days:\n"))
