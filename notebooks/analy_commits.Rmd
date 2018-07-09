@@ -60,27 +60,56 @@ data %>%
   labs(y="Frequência Relativa")
 ```
 
-
-## File Extension
-
-```{r}
-data %>%
-  group_by(file_extension) %>%
-  summarise(frequency = n()) %>%
-  ggplot(aes(x=reorder(file_extension,frequency),y = frequency)) + 
-  geom_bar(stat="identity",position="dodge") +
-  theme(axis.text.x = element_text(angle=60, hjust=1))
-```
-
 ```{r}
 data %>%
   group_by(file_extension, isWeekend) %>%
-  summarise(frequency = n()) %>%
-  ggplot(aes(x=reorder(file_extension,frequency),
-             y = frequency,
+  summarise(popularity = sum(users)) %>%
+  ggplot(aes(x=reorder(file_extension,popularity),
+             y = popularity,
              fill=isWeekend)) + 
   geom_bar(stat="identity") + 
   theme(axis.text.x = element_text(angle=60, hjust=1))
 ```
 
+## Java
+
+```{r}
+data %>%
+  filter(file_extension == "java") %>%
+  ggplot(aes(x="", 
+             y=users,
+             group=isWeekend, 
+             fill=isWeekend)) + 
+  geom_boxplot() +
+  labs(x="") +
+  ggtitle("Java popularity weekday vs weekend")
+```
+
+## Python
+
+```{r}
+data %>%
+  filter(file_extension == "py") %>%
+  ggplot(aes(x="", 
+             y=users,
+             group=isWeekend, 
+             fill=isWeekend)) + 
+  geom_boxplot() + 
+  labs(x="") +
+  ggtitle("Python popularity weekday vs weekend")
+```
+
+## How they behave on the weekend?
+
+```{r}
+data %>%
+  filter(isWeekend) %>%
+  filter(file_extension %in% c("py","java")) %>%
+  ggplot(aes(x=file_extension, 
+             y=users,
+             group=file_extension, 
+             fill=file_extension)) + 
+  geom_boxplot() +
+  ggtitle("Python vs Java on the weekends")
+```
 
