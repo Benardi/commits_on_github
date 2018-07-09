@@ -72,4 +72,15 @@ data %>%
   theme(axis.text.x = element_text(angle=60, hjust=1))
 ```
 
+```{r}
+data %>%
+  group_by(file_extension, isWeekend) %>%
+  summarise(frequency = n()) %>%
+  ggplot(aes(x=reorder(file_extension,frequency),
+             y = frequency,
+             fill=isWeekend)) + 
+  geom_bar(stat="identity") + 
+  theme(axis.text.x = element_text(angle=60, hjust=1))
+```
+
 
