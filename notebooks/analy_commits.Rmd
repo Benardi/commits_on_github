@@ -86,34 +86,6 @@ data %>%
   ggtitle("Java popularity weekday vs weekend")
 ```
 
-## Python
-
-```{r}
-data %>%
-  filter(file_extension == "py") %>%
-  ggplot(aes(x="", 
-             y=users,
-             group=isWeekend, 
-             fill=isWeekend)) + 
-  geom_boxplot() + 
-  labs(x="") +
-  ggtitle("Python popularity weekday vs weekend")
-```
-
-## How they behave on the weekend?
-
-```{r}
-data %>%
-  filter(isWeekend) %>%
-  filter(file_extension %in% c("py","java")) %>%
-  ggplot(aes(x=file_extension, 
-             y=users,
-             group=file_extension, 
-             fill=file_extension)) + 
-  geom_boxplot() +
-  ggtitle("Python vs Java on the weekends")
-```
-
 ```{r}
 data %>%
   filter(file_extension == "java") %>%
@@ -143,6 +115,19 @@ df %>%
   geom_errorbar(width = .2)
 ```
 
+## Python
+
+```{r}
+data %>%
+  filter(file_extension == "py") %>%
+  ggplot(aes(x="", 
+             y=users,
+             group=isWeekend, 
+             fill=isWeekend)) + 
+  geom_boxplot() + 
+  labs(x="") +
+  ggtitle("Python popularity weekday vs weekend")
+```
 
 ```{r}
 data %>%
@@ -172,6 +157,19 @@ df %>%
   geom_errorbar(width = .2)
 ```
 
+## How they behave on the weekend?
+
+```{r}
+data %>%
+  filter(isWeekend) %>%
+  filter(file_extension %in% c("py","java")) %>%
+  ggplot(aes(x=file_extension, 
+             y=users,
+             group=file_extension, 
+             fill=file_extension)) + 
+  geom_boxplot() +
+  ggtitle("Python vs Java on the weekends")
+```
 
 ```{r}
 cat(paste("Java on weekend days:\n"))
