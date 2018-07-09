@@ -133,6 +133,18 @@ java.weekend
 ```
 
 ```{r}
+df = data.frame(rbind(java.week, 
+                      java.weekend[rownames(java.weekend),]))
+
+df$medida = c("java.week", "java.weekend")
+
+df %>% 
+  ggplot(aes(x = medida, ymin = X2.5., ymax = X97.5.)) + 
+  geom_errorbar(width = .2)
+```
+
+
+```{r}
 data %>%
   filter(file_extension == "py") %>%
   filter(!isWeekend) %>%
@@ -151,9 +163,29 @@ python.weekend
 ```
 
 ```{r}
+df = data.frame(rbind(python.week, 
+                      python.weekend[rownames(python.week),]))
+df$medida = c("python.week", "python.weekend")
+
+df %>% 
+  ggplot(aes(x = medida, ymin = X2.5., ymax = X97.5.)) + 
+  geom_errorbar(width = .2)
+```
+
+
+```{r}
 cat(paste("Java on weekend days:\n"))
 java.weekend
 cat(paste("\n\nPython on weekend days:\n"))
 python.weekend
 ```
 
+```{r}
+df = data.frame(rbind(java.weekend, 
+                      python.weekend[rownames(python.week),]))
+df$medida = c("java.weekend", "python.weekend")
+
+df %>% 
+  ggplot(aes(x = medida, ymin = X2.5., ymax = X97.5.)) + 
+  geom_errorbar(width = .2)
+```
