@@ -49,10 +49,10 @@ data %>%
 
 ```{r}
 data %>%
-  mutate(isWeekend = timeDate::isWeekend(
-    lubridate::ymd(paste(the_year,
+  mutate(cronology = lubridate::ymd(paste(the_year,
                          the_month,
-                         month_day)))) -> data
+                         month_day)),
+         isWeekend = timeDate::isWeekend(cronology)) -> data
 data %>%
   sample_n(10)
 ```
@@ -75,6 +75,20 @@ data %>%
              fill=isWeekend)) + 
   geom_bar(stat="identity") + 
   theme(axis.text.x = element_text(angle=60, hjust=1))
+```
+
+```{r}
+data %>%
+  filter(file_extension %in% c("py","java")) %>%
+  ggplot(aes(users,cronology,color=isWeekend)) +
+  geom_segment(aes(x = 0, y = cronology, 
+                 xend = users, 
+                 yend = cronology),
+               color = "grey50",
+               size=0.15) +
+  geom_point() +
+  facet_wrap(~ file_extension, nrow = 2) + 
+  coord_flip()
 ```
 
 ***
