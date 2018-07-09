@@ -13,6 +13,13 @@ output:
 
 <br>
 
+# Introdução
+
+> The code and data can be found at the [original repository](https://github.com/Benardi/commits_on_github)
+
+<br>
+
+***
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
 library(here)
@@ -39,8 +46,6 @@ readr::read_csv(here::here("data/github-users-committing-filetypes.csv"),
 data %>% 
   glimpse()
 ```
-
-## Was the commit made on a weekend ?
 
 ```{r}
 data %>%
@@ -72,7 +77,13 @@ data %>%
   theme(axis.text.x = element_text(angle=60, hjust=1))
 ```
 
-## Java
+***
+
+# Java
+
+<br>
+
+## Overview
 
 ```{r}
 data %>%
@@ -85,6 +96,8 @@ data %>%
   labs(x="") +
   ggtitle("Java popularity weekday vs weekend")
 ```
+
+## Inference on two samples
 
 ```{r}
 data %>%
@@ -115,7 +128,34 @@ df %>%
   geom_errorbar(width = .2)
 ```
 
-## Python
+## Inference on the unpaired difference of two samples
+
+```{r}
+# Agora a diferença das médias
+
+data %>%
+  filter(file_extension == "java") -> java
+
+b.diff.means <- bootstrap2(java$users, 
+                          treatment = java$isWeekend, 
+                          median)
+
+means.diff = CI.percentile(b.diff.means, probs = c(.05, .95))
+means.diff
+
+data.frame(means.diff) %>%
+  ggplot(aes(x = "Diferença", ymin = X5., ymax = X95.)) +
+  geom_errorbar(width = .2) +
+  geom_hline(yintercept = 0, colour = "darkorange")
+```
+
+***
+
+# Python
+
+<br>
+
+## Overview
 
 ```{r}
 data %>%
@@ -128,6 +168,8 @@ data %>%
   labs(x="") +
   ggtitle("Python popularity weekday vs weekend")
 ```
+
+## Inference on two samples
 
 ```{r}
 data %>%
@@ -157,7 +199,34 @@ df %>%
   geom_errorbar(width = .2)
 ```
 
-## How they behave on the weekend?
+## Inference on the unpaired difference of two samples
+
+```{r}
+# Agora a diferença das médias
+
+data %>%
+  filter(file_extension == "py") -> python
+
+b.diff.means <- bootstrap2(python$users, 
+                          treatment = python$isWeekend, 
+                          median)
+
+means.diff = CI.percentile(b.diff.means, probs = c(.05, .95))
+means.diff
+
+data.frame(means.diff) %>%
+  ggplot(aes(x = "Diferença", ymin = X5., ymax = X95.)) +
+  geom_errorbar(width = .2) +
+  geom_hline(yintercept = 0, colour = "darkorange")
+```
+
+***
+
+# Python/Java on the weekend
+
+<br>
+
+## Overview
 
 ```{r}
 data %>%
@@ -170,6 +239,8 @@ data %>%
   geom_boxplot() +
   ggtitle("Python vs Java on the weekends")
 ```
+
+## Inference on two samples
 
 ```{r}
 cat(paste("Java on weekend days:\n"))
@@ -186,4 +257,26 @@ df$medida = c("java.weekend", "python.weekend")
 df %>% 
   ggplot(aes(x = medida, ymin = X2.5., ymax = X97.5.)) + 
   geom_errorbar(width = .2)
+```
+
+## Inference on the unpaired difference of two samples
+
+```{r}
+# Agora a diferença das médias
+
+data %>%
+  filter(isWeekend) %>%
+  filter(file_extension %in% c("py","java")) -> weekend
+
+b.diff.means <- bootstrap2(weekend$users, 
+                          treatment = weekend$file_extension, 
+                          median)
+
+means.diff = CI.percentile(b.diff.means, probs = c(.05, .95))
+means.diff
+
+data.frame(means.diff) %>%
+  ggplot(aes(x = "Diferença", ymin = X5., ymax = X95.)) +
+  geom_errorbar(width = .2) +
+  geom_hline(yintercept = 0, colour = "darkorange")
 ```
