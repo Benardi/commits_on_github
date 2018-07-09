@@ -57,6 +57,8 @@ data %>%
   sample_n(10)
 ```
 
+## All file extensions
+
 ```{r}
 data %>%
   ggplot(aes(isWeekend,
@@ -76,6 +78,35 @@ data %>%
   geom_bar(stat="identity") + 
   theme(axis.text.x = element_text(angle=60, hjust=1))
 ```
+
+```{r}
+data %>%
+  group_by(cronology,isWeekend) %>%
+  summarise(popularity = sum(users)) %>%
+  ggplot(aes(popularity,cronology,color=isWeekend)) +
+  geom_segment(aes(x = 0, y = cronology, 
+                 xend = popularity, 
+                 yend = cronology),
+               color = "grey50",
+               size=0.15) +
+  geom_point() +
+  coord_flip()
+```
+
+## Python and Java
+
+```{r}
+data %>%
+  filter(file_extension %in% c("py","java")) %>%
+  group_by(file_extension, isWeekend) %>%
+  summarise(popularity = sum(users)) %>%
+  ggplot(aes(x=reorder(file_extension,popularity),
+             y = popularity,
+             fill=isWeekend)) + 
+  geom_bar(stat="identity") + 
+  theme(axis.text.x = element_text(angle=60, hjust=1))
+```
+
 
 ```{r}
 data %>%
@@ -145,14 +176,14 @@ df %>%
 ## Inference on the unpaired difference of two samples
 
 ```{r}
-# Agora a diferença das médias
+# Agora a diferença das medianas
 
 data %>%
   filter(file_extension == "java") -> java
 
 b.diff.means <- bootstrap2(java$users, 
                           treatment = java$isWeekend, 
-                          median)
+                          median, R = 10000)
 
 means.diff = CI.percentile(b.diff.means, probs = c(.05, .95))
 means.diff
@@ -217,14 +248,14 @@ df %>%
 ## Inference on the unpaired difference of two samples
 
 ```{r}
-# Agora a diferença das médias
+# Agora a diferença das medianas
 
 data %>%
   filter(file_extension == "py") -> python
 
 b.diff.means <- bootstrap2(python$users, 
                           treatment = python$isWeekend, 
-                          median)
+                          median, R = 10000)
 
 means.diff = CI.percentile(b.diff.means, probs = c(.05, .95))
 means.diff
@@ -277,7 +308,7 @@ df %>%
 ## Inference on the unpaired difference of two samples
 
 ```{r}
-# Agora a diferença das médias
+# Agora a diferença das medianas
 
 data %>%
   filter(isWeekend) %>%
@@ -285,7 +316,7 @@ data %>%
 
 b.diff.means <- bootstrap2(weekend$users, 
                           treatment = weekend$file_extension, 
-                          median)
+                          median, R = 10000)
 
 means.diff = CI.percentile(b.diff.means, probs = c(.05, .95))
 means.diff
