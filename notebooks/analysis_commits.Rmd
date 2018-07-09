@@ -65,7 +65,8 @@ data %>%
              y=(..count..)/sum(..count..),
              fill = isWeekend)) +
   geom_bar() + 
-  labs(y="Frequência Relativa")
+  labs(y="Relative Frequency", 
+       x="Is it a weekend")
 ```
 
 ```{r}
@@ -76,7 +77,8 @@ data %>%
              y = popularity,
              fill=isWeekend)) + 
   geom_bar(stat="identity") + 
-  theme(axis.text.x = element_text(angle=60, hjust=1))
+  theme(axis.text.x = element_text(angle=60, hjust=1)) +
+  labs(x="File extension",y="Total of Users")
 ```
 
 ```{r}
@@ -90,7 +92,9 @@ data %>%
                color = "grey50",
                size=0.15) +
   geom_point() +
-  coord_flip()
+  coord_flip() +
+  labs(y="Point in Time",
+       x="Total of Users")
 ```
 
 ## Python and Java
@@ -104,7 +108,8 @@ data %>%
              y = popularity,
              fill=isWeekend)) + 
   geom_bar(stat="identity") + 
-  theme(axis.text.x = element_text(angle=60, hjust=1))
+  theme(axis.text.x = element_text(angle=60, hjust=1)) +
+  labs(x="File extension",y="Total of Users")
 ```
 
 
@@ -118,8 +123,11 @@ data %>%
                color = "grey50",
                size=0.15) +
   geom_point() +
-  facet_wrap(~ file_extension, nrow = 2) + 
-  coord_flip()
+  facet_wrap(~ file_extension,
+             nrow = 2) + 
+  coord_flip() +
+  labs(y="Point in Time",
+       x="Number of Users")
 ```
 
 ***
@@ -138,8 +146,11 @@ data %>%
              group=isWeekend, 
              fill=isWeekend)) + 
   geom_boxplot() +
-  labs(x="") +
-  ggtitle("Java popularity weekday vs weekend")
+  labs(y="Number of users") +
+  ggtitle("Java popularity (weekdays vs weekend)") +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
 ```
 
 ## Inference on two samples
@@ -166,14 +177,19 @@ java.weekend
 df = data.frame(rbind(java.week, 
                       java.weekend[rownames(java.weekend),]))
 
-df$medida = c("java.week", "java.weekend")
+df$medida = c("JAVA (Week)", "JAVA (Weekend)")
 
 df %>% 
   ggplot(aes(x = medida, ymin = X2.5., ymax = X97.5.)) + 
-  geom_errorbar(width = .2)
+  geom_errorbar(width = .2) +
+  labs(y= "Number of users", x="Group")
 ```
 
 ## Inference on the unpaired difference of two samples
+
+<br>
+
+* Let's bootstrap the unpaired difference between the median number of java users on weekdays and the median number of java users on weekends.
 
 ```{r}
 # Agora a diferença das medianas
@@ -189,10 +205,11 @@ means.diff = CI.percentile(b.diff.means, probs = c(.025, .975))
 means.diff
 
 data.frame(means.diff) %>%
-  ggplot(aes(x = "Diferença",ymin = X2.5., ymax = X97.5.)) +
+  ggplot(aes(x = "Difference",ymin = X2.5., ymax = X97.5.)) +
   geom_errorbar(width = .2) +
   geom_hline(yintercept = 0, colour = "darkorange") +
   labs(x="")
+
 ```
 
 ***
@@ -211,8 +228,11 @@ data %>%
              group=isWeekend, 
              fill=isWeekend)) + 
   geom_boxplot() + 
-  labs(x="") +
-  ggtitle("Python popularity weekday vs weekend")
+  labs(x="", y="Number of users") +
+  ggtitle("Python popularity weekday vs weekend") +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
 ```
 
 ## Inference on two samples
@@ -243,10 +263,15 @@ df$medida = c("python.week", "python.weekend")
 
 df %>% 
   ggplot(aes(x = medida, ymin = X2.5., ymax = X97.5.)) + 
-  geom_errorbar(width = .2)
+  geom_errorbar(width = .2) +
+  labs(x="Grupos", y="Number of users")
 ```
 
 ## Inference on the unpaired difference of two samples
+
+<br>
+
+* Let's bootstrap the unpaired difference between the median number of python users on weekdays and the median number of python users on weekends.
 
 ```{r}
 # Agora a diferença das medianas
@@ -262,7 +287,7 @@ means.diff = CI.percentile(b.diff.means, probs = c(.025, .975))
 means.diff
 
 data.frame(means.diff) %>%
-  ggplot(aes(x = "Diferença",ymin = X2.5., ymax = X97.5.)) +
+  ggplot(aes(x = "Difference",ymin = X2.5., ymax = X97.5.)) +
   geom_errorbar(width = .2) +
   geom_hline(yintercept = 0, colour = "darkorange") +
   labs(x="")
@@ -285,7 +310,11 @@ data %>%
              group=file_extension, 
              fill=file_extension)) + 
   geom_boxplot() +
-  ggtitle("Python vs Java on the weekends")
+  ggtitle("Python vs Java (Weekends)") +
+    theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  labs(y="Number of Users")
 ```
 
 ## Inference on two samples
@@ -309,6 +338,11 @@ df %>%
 
 ## Inference on the unpaired difference of two samples
 
+<br>
+
+* Let's bootstrap the unpaired difference between the median number of java and python users on weekends.
+
+
 ```{r}
 # Agora a diferença das medianas
 
@@ -324,7 +358,7 @@ means.diff = CI.percentile(b.diff.means, probs = c(.025, .975))
 means.diff
 
 data.frame(means.diff) %>%
-  ggplot(aes(x = "Diferença",ymin = X2.5., ymax = X97.5.)) +
+  ggplot(aes(x = "Difference",ymin = X2.5., ymax = X97.5.)) +
   geom_errorbar(width = .2) +
   geom_hline(yintercept = 0, colour = "darkorange") +
   labs(x="")
