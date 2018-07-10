@@ -35,6 +35,8 @@ theme_set(theme_bw())
 
 # Data Overview
 
+<br>
+
 ```{r, warning=FALSE}
 readr::read_csv(here::here("data/github-users-committing-filetypes.csv"),
                       progress = FALSE,
@@ -48,6 +50,10 @@ readr::read_csv(here::here("data/github-users-committing-filetypes.csv"),
 data %>% 
   glimpse()
 ```
+
+<br>
+
+* We will recreate a date object based on the dataframe columns and from it deduce whether the day of that observation was a weekend day or not.
 
 ```{r}
 data %>%
@@ -70,7 +76,7 @@ data %>%
              fill=isWeekend)) + 
   geom_bar(stat="identity") + 
   theme(axis.text.x = element_text(angle=60, hjust=1)) +
-  labs(x="File extension",y="Number of files edited by users")
+  labs(x="File extension",y="Number of users editing files")
 ```
 
 * A lot of md and web related files (json, js, html) were commited on weekends. Looks like documenting and working on the front-end goes on during weekends, poor front-end developers...
@@ -90,7 +96,7 @@ data %>%
   geom_point() +
   coord_flip() +
   labs(y="Point in Time",
-       x="Number of files edited by users")
+       x="Number of users editing files")
 ```
 
 * We can see a sizable decreae in user's commits around January, this matches typical holydays.
@@ -109,7 +115,7 @@ data %>%
              fill=isWeekend)) + 
   geom_bar(stat="identity") + 
   theme(axis.text.x = element_text(angle=60, hjust=1)) +
-  labs(x="File extension",y="Median number of files edited by users")
+  labs(x="File extension",y="Median number of users editing files")
 ```
 
 * In terms of **sample** Python seems to have more commits than Java on weekends regarding median.
@@ -129,7 +135,7 @@ data %>%
              nrow = 2) + 
   coord_flip() +
   labs(y="Point in Time",
-       x="Number of files edited by users")
+       x="Number of users editing files")
 ```
 
 * Both Python and Java reflect the same drop on file editions around January.
@@ -162,14 +168,14 @@ data %>%
              group=isWeekend, 
              fill=isWeekend)) + 
   geom_boxplot() +
-  labs(y="Number of users") +
+  labs(y="Number of users editing files") +
   ggtitle("Java popularity (weekdays vs weekend)") +
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 ```
 
-* In terms of **sample** we see more clearly that those who use Java work way more during the week.
+* In terms of **sample** we see more clearly that Java coders work way more during the week.
 
 <br>
 
@@ -195,6 +201,9 @@ cat(paste("\n\nJava on weekend days:\n"))
 java.weekend
 ```
 
+<br>
+<br>
+
 ```{r, results='hold'}
 df = data.frame(rbind(java.week, 
                       java.weekend[rownames(java.weekend),]))
@@ -204,7 +213,7 @@ df$medida = c("JAVA (Week)", "JAVA (Weekend)")
 df %>% 
   ggplot(aes(x = medida, ymin = X2.5., ymax = X97.5.)) + 
   geom_errorbar(width = .2) +
-  labs(y= "Number of users", x="Group")
+  labs(y= "Number of users editing files", x="Group")
 ```
 
 <br>
@@ -240,12 +249,13 @@ data.frame(means.diff) %>%
 
 ```
 
+* The C.I shows us that Java coders work way more during the week (Interval is exclusively above 0), that was expected given the business feel the community around Java has.
+
 <br>
 
 > Looking at the confidence intervals (C.I.) of the unpaired difference between the median number of java users on weekdays and the median number of java users on weekends **we can say at a 95% degree of confidence that the median of files edited by Java coders during the week is significantly bigger than the median of files edited by Java coders during the weekend**.  
 
 <br>
-
 
 ***
 
@@ -263,12 +273,16 @@ data %>%
              group=isWeekend, 
              fill=isWeekend)) + 
   geom_boxplot() + 
-  labs(x="", y="Number of users") +
+  labs(x="", y="Number of users editing files") +
   ggtitle("Python popularity weekday vs weekend") +
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
 ```
+
+* In terms of **sample** we see more clearly that Python coders work way more during the week.
+
+<br>
 
 ### Inference on two samples
 
@@ -290,6 +304,8 @@ cat(paste("\n\nPython on weekend days:\n"))
 python.weekend
 ```
 
+<br>
+<br>
 
 ```{r}
 df = data.frame(rbind(python.week, 
@@ -299,8 +315,14 @@ df$medida = c("python.week", "python.weekend")
 df %>% 
   ggplot(aes(x = medida, ymin = X2.5., ymax = X97.5.)) + 
   geom_errorbar(width = .2) +
-  labs(x="Grupos", y="Number of users")
+  labs(y= "Number of users editing files", x="Group")
 ```
+
+<br>
+
+>Looking at the confidence intervals (C.I.) for Python coders editions during the week and Python coders editions during the weekend **we can say at a 95% degree of confidence that there's a statistically significant difference between the median of files edited by Python coders during the week and the median of files edited by Python coders during the weekend.**  
+
+<br>
 
 ### Inference on the unpaired difference of two samples
 
@@ -328,6 +350,15 @@ data.frame(means.diff) %>%
   labs(x="")
 ```
 
+* The C.I shows us that Python coders work way more during the week (Interval is exclusively above 0). 
+  * The former was not unexpected to be honest, given that there's a whole business segment around Python despite its hypster vibes.
+
+<br>
+
+> Looking at the confidence intervals (C.I.) of the unpaired difference between the median number of Python users on weekdays and the median number of Python users on weekends **we can say at a 95% degree of confidence that the median of files edited by Python coders during the week is significantly bigger than the median of files edited by Python coders during the weekend**.  
+
+<br>
+
 ***
 
 ## Python/Java on the weekend
@@ -349,7 +380,7 @@ data %>%
     theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank()) +
-  labs(y="Number of Users")
+  labs(y="Number of users editing files")
 ```
 
 ### Inference on two samples
@@ -368,7 +399,8 @@ df$medida = c("java.weekend", "python.weekend")
 
 df %>% 
   ggplot(aes(x = medida, ymin = X2.5., ymax = X97.5.)) + 
-  geom_errorbar(width = .2)
+  geom_errorbar(width = .2) +
+  labs(y= "Number of users editing files", x="Group")
 ```
 
 ### Inference on the unpaired difference of two samples
