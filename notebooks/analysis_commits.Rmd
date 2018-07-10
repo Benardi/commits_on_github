@@ -1,5 +1,5 @@
 ---
-title: "Análise de commits no Github"
+title: "Analysis about commits on Github 2016-2017"
 author: "José Benardi de Souza Nunes"
 output:
   html_document:
@@ -397,7 +397,9 @@ data %>%
   labs(y="Number of users editing files")
 ```
 
-* In terms of **sample** we see more clearly that Pythonis more popular on weekends than Java.
+* In terms of **sample** we see more clearly that Python is more popular on weekends than Java.
+
+<br>
 
 ### Inference on two samples
 
@@ -457,6 +459,6 @@ data.frame(means.diff) %>%
 
 <br>
 
-> Looking at the confidence intervals (C.I.) of the unpaired difference between Java and Python popularity during the weekend **we can say at a 95% degree of confidence Python is significantly more popular during the weekend than Java**.  
+> Looking at the confidence intervals (C.I.) of the unpaired difference between Java and Python popularity during the weekend **we can say at a 95% degree of confidence that Python is significantly more popular during the weekend than Java**.  
 
 <br>
