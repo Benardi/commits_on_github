@@ -15,7 +15,9 @@ output:
 
 # Introdução
 
-> The code and data can be found at the [original repository](https://github.com/Benardi/commits_on_github)
+<br>
+
+> The code and data employed here can be found at the [original repository](https://github.com/Benardi/commits_on_github). The data employed on this report is a sample of the commits made on some of the repositories on Github each day from 2016 to 2017.
 
 <br>
 
@@ -61,16 +63,6 @@ data %>%
 
 ```{r}
 data %>%
-  ggplot(aes(isWeekend,
-             y=(..count..)/sum(..count..),
-             fill = isWeekend)) +
-  geom_bar() + 
-  labs(y="Relative Frequency", 
-       x="Is it a weekend")
-```
-
-```{r}
-data %>%
   group_by(file_extension, isWeekend) %>%
   summarise(popularity = sum(users)) %>%
   ggplot(aes(x=reorder(file_extension,popularity),
@@ -78,8 +70,12 @@ data %>%
              fill=isWeekend)) + 
   geom_bar(stat="identity") + 
   theme(axis.text.x = element_text(angle=60, hjust=1)) +
-  labs(x="File extension",y="Total of Users")
+  labs(x="File extension",y="Number of files edited by users")
 ```
+
+* A lot of md and web related files (json, js, html) were commited on weekends. Looks like documenting and working on the front-end goes on during weekends, poor front-end developers...
+
+<br>
 
 ```{r}
 data %>%
@@ -94,8 +90,12 @@ data %>%
   geom_point() +
   coord_flip() +
   labs(y="Point in Time",
-       x="Total of Users")
+       x="Number of files edited by users")
 ```
+
+* We can see a sizable decreae in user's commits around January, this matches typical holydays.
+
+<br>
 
 ## Python and Java
 
@@ -103,15 +103,17 @@ data %>%
 data %>%
   filter(file_extension %in% c("py","java")) %>%
   group_by(file_extension, isWeekend) %>%
-  summarise(popularity = sum(users)) %>%
+  summarise(popularity = median(users)) %>%
   ggplot(aes(x=reorder(file_extension,popularity),
              y = popularity,
              fill=isWeekend)) + 
   geom_bar(stat="identity") + 
   theme(axis.text.x = element_text(angle=60, hjust=1)) +
-  labs(x="File extension",y="Total of Users")
+  labs(x="File extension",y="Median number of files edited by users")
 ```
 
+* In terms of **sample** Python seems to have more commits than Java on weekends regarding median.
+* In terms of **sample** both Java and Python seem to have more files edited over weekdays than over weekends, regarding median. 
 
 ```{r}
 data %>%
@@ -127,16 +129,30 @@ data %>%
              nrow = 2) + 
   coord_flip() +
   labs(y="Point in Time",
-       x="Number of Users")
+       x="Number of files edited by users")
 ```
 
-***
-
-# Java
+* Both Python and Java reflect the same drop on file editions around January.
 
 <br>
 
-## Overview
+***
+
+<br>
+
+# Statistical Inference
+
+<br>
+
+> As talking about the **sample** isn't enough to draw conclusions about the population (coders in Github), further into this report we will make use of **statistical inference**.
+
+<br>
+
+## Java
+
+<br>
+
+### Overview
 
 ```{r}
 data %>%
@@ -153,7 +169,13 @@ data %>%
         axis.ticks.x=element_blank())
 ```
 
-## Inference on two samples
+* In terms of **sample** we see more clearly that those who use Java work way more during the week.
+
+<br>
+
+### Inference on two samples
+
+* We will make use of confidence intervals at a 95% degree of confidence
 
 ```{r, results='hold'}
 data %>%
@@ -173,7 +195,7 @@ cat(paste("\n\nJava on weekend days:\n"))
 java.weekend
 ```
 
-```{r}
+```{r, results='hold'}
 df = data.frame(rbind(java.week, 
                       java.weekend[rownames(java.weekend),]))
 
@@ -185,15 +207,21 @@ df %>%
   labs(y= "Number of users", x="Group")
 ```
 
-## Inference on the unpaired difference of two samples
+<br>
+
+>Looking at the confidence intervals (C.I.) for Java coders editions during the week and Java coders editions during the weekend **we can say at a 95% degree of confidence that there's a statistically significant difference between the median of files edited by Java coders during the week and the median of files edited by Java coders during the weekend.**  
+
+<br>
+
+### Inference on the unpaired difference of two samples
 
 <br>
 
 * Let's bootstrap the unpaired difference between the median number of java users on weekdays and the median number of java users on weekends.
 
-```{r}
-# Agora a diferença das medianas
+<br>
 
+```{r, results='hold'}
 data %>%
   filter(file_extension == "java") -> java
 
@@ -212,13 +240,20 @@ data.frame(means.diff) %>%
 
 ```
 
-***
+<br>
 
-# Python
+> Looking at the confidence intervals (C.I.) of the unpaired difference between the median number of java users on weekdays and the median number of java users on weekends **we can say at a 95% degree of confidence that the median of files edited by Java coders during the week is significantly bigger than the median of files edited by Java coders during the weekend**.  
 
 <br>
 
-## Overview
+
+***
+
+## Python
+
+<br>
+
+### Overview
 
 ```{r}
 data %>%
@@ -235,7 +270,7 @@ data %>%
         axis.ticks.x=element_blank())
 ```
 
-## Inference on two samples
+### Inference on two samples
 
 ```{r, results='hold'}
 data %>%
@@ -267,15 +302,15 @@ df %>%
   labs(x="Grupos", y="Number of users")
 ```
 
-## Inference on the unpaired difference of two samples
+### Inference on the unpaired difference of two samples
 
 <br>
 
 * Let's bootstrap the unpaired difference between the median number of python users on weekdays and the median number of python users on weekends.
 
-```{r}
-# Agora a diferença das medianas
+<br>
 
+```{r, results='hold'}
 data %>%
   filter(file_extension == "py") -> python
 
@@ -295,11 +330,11 @@ data.frame(means.diff) %>%
 
 ***
 
-# Python/Java on the weekend
+## Python/Java on the weekend
 
 <br>
 
-## Overview
+### Overview
 
 ```{r}
 data %>%
@@ -317,7 +352,7 @@ data %>%
   labs(y="Number of Users")
 ```
 
-## Inference on two samples
+### Inference on two samples
 
 ```{r, results='hold'}
 cat(paste("Java on weekend days:\n"))
@@ -336,16 +371,15 @@ df %>%
   geom_errorbar(width = .2)
 ```
 
-## Inference on the unpaired difference of two samples
+### Inference on the unpaired difference of two samples
 
 <br>
 
 * Let's bootstrap the unpaired difference between the median number of java and python users on weekends.
 
+<br>
 
-```{r}
-# Agora a diferença das medianas
-
+```{r, results='hold'}
 data %>%
   filter(isWeekend) %>%
   filter(file_extension %in% c("py","java")) -> weekend
