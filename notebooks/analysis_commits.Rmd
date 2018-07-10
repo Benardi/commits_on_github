@@ -1,6 +1,7 @@
 ---
-title: "Analysis about commits on Github 2016-2017"
+title: "Analysis on Github commits (2016-2017)"
 author: "José Benardi de Souza Nunes"
+date: 10/07/2018
 output:
   html_document:
     df_print: paged
@@ -132,8 +133,10 @@ data %>%
   labs(x="File extension",y="Popularity")
 ```
 
-* In terms of **sample** Python seems to be more popular than Java.
+* In terms of **sample** Python seems to be more popular on weekends than Java.
 * In terms of **sample** both Java and Python seem to more popular on weekdays than on weekends. 
+
+<br>
 
 ```{r}
 data %>%
@@ -195,6 +198,8 @@ data %>%
 
 ### Inference on two samples
 
+<br>
+
 * We will make use of confidence intervals at a 95% degree of confidence
 
 ```{r, results='hold'}
@@ -240,7 +245,7 @@ df %>%
 
 <br>
 
-* Let's bootstrap the unpaired difference between java popularity during the week and java popularity druing the weekend.
+* Let's bootstrap the unpaired difference between java popularity during the week and java popularity during the weekend.
 
 <br>
 
@@ -364,7 +369,7 @@ data.frame(means.diff) %>%
   labs(x="")
 ```
 
-* The C.I shows us that Python is more popular during the week (Interval is exclusively above 0). 
+* The C.I shows us that Python is more popular during the week than during the weekend (Interval is exclusively above 0). 
   * The former was not unexpected to be honest, given that there's a whole business segment around Python despite its carefree vibes.
 
 <br>
@@ -456,6 +461,11 @@ data.frame(means.diff) %>%
   geom_hline(yintercept = 0, colour = "darkorange") +
   labs(x="")
 ```
+
+<br>
+
+* The C.I shows us that Python is more popular than Java during the weekend (Interval is exclusively below 0).
+* Python has a much more carefree vibe to it than Java (which is heavily tied to a business enviroment). It comes as no surprise that people would rather use Python on the weekend.  
 
 <br>
 
