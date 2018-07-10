@@ -53,7 +53,19 @@ data %>%
 
 <br>
 
-* We will recreate a date object based on the dataframe columns and from it deduce whether the day of that observation was a weekend day or not.
+## Popularity
+
+<br>
+
+>We will refer to popularity as the median number of users that commited files of a certain language. In other words, **the more people commit files in a programming language the more popular it is.**
+
+<br>
+
+## Is it Weekend yet?
+
+<br>
+
+* We will recreate a date object based on the dataframe columns (month_day, the_month, the_year) and from this date object deduce whether the day of that observation was a weekend day or not (**isWeekend**).
 
 ```{r}
 data %>%
@@ -64,6 +76,8 @@ data %>%
 data %>%
   sample_n(10)
 ```
+
+<br>
 
 ## All file extensions
 
@@ -76,7 +90,7 @@ data %>%
              fill=isWeekend)) + 
   geom_bar(stat="identity") + 
   theme(axis.text.x = element_text(angle=60, hjust=1)) +
-  labs(x="File extension",y="Number of users editing files")
+  labs(x="File extension",y="Number of editing users")
 ```
 
 * A lot of md and web related files (json, js, html) were commited on weekends. Looks like documenting and working on the front-end goes on during weekends, poor front-end developers...
@@ -96,10 +110,10 @@ data %>%
   geom_point() +
   coord_flip() +
   labs(y="Point in Time",
-       x="Number of users editing files")
+       x="Number of editing users")
 ```
 
-* We can see a sizable decreae in user's commits around January, this matches typical holydays.
+* We can see a sizable decrease in user's commits around January, this matches typical holydays.
 
 <br>
 
@@ -115,11 +129,11 @@ data %>%
              fill=isWeekend)) + 
   geom_bar(stat="identity") + 
   theme(axis.text.x = element_text(angle=60, hjust=1)) +
-  labs(x="File extension",y="Median number of users editing files")
+  labs(x="File extension",y="Popularity")
 ```
 
-* In terms of **sample** Python seems to have more commits than Java on weekends regarding median.
-* In terms of **sample** both Java and Python seem to have more files edited over weekdays than over weekends, regarding median. 
+* In terms of **sample** Python seems to be more popular than Java.
+* In terms of **sample** both Java and Python seem to more popular on weekdays than on weekends. 
 
 ```{r}
 data %>%
@@ -135,7 +149,7 @@ data %>%
              nrow = 2) + 
   coord_flip() +
   labs(y="Point in Time",
-       x="Number of users editing files")
+       x="Number of editing users")
 ```
 
 * Both Python and Java reflect the same drop on file editions around January.
@@ -168,7 +182,7 @@ data %>%
              group=isWeekend, 
              fill=isWeekend)) + 
   geom_boxplot() +
-  labs(y="Number of users editing files") +
+  labs(y="Number of editing users") +
   ggtitle("Java popularity (weekdays vs weekend)") +
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
@@ -213,12 +227,12 @@ df$medida = c("JAVA (Week)", "JAVA (Weekend)")
 df %>% 
   ggplot(aes(x = medida, ymin = X2.5., ymax = X97.5.)) + 
   geom_errorbar(width = .2) +
-  labs(y= "Number of users editing files", x="Group")
+  labs(y= "Popularity", x="Group")
 ```
 
 <br>
 
->Looking at the confidence intervals (C.I.) for Java coders editions during the week and Java coders editions during the weekend **we can say at a 95% degree of confidence that there's a statistically significant difference between the median of files edited by Java coders during the week and the median of files edited by Java coders during the weekend.**  
+>Looking at the confidence intervals (C.I.) of Java popularity during the week and during the weekend **we can say at a 95% degree of confidence that there's a statistically significant difference between Java popularity during the week and the weekend.**  
 
 <br>
 
@@ -226,7 +240,7 @@ df %>%
 
 <br>
 
-* Let's bootstrap the unpaired difference between the median number of java users on weekdays and the median number of java users on weekends.
+* Let's bootstrap the unpaired difference between java popularity during the week and java popularity druing the weekend.
 
 <br>
 
@@ -249,11 +263,11 @@ data.frame(means.diff) %>%
 
 ```
 
-* The C.I shows us that Java coders work way more during the week (Interval is exclusively above 0), that was expected given the business feel the community around Java has.
+* The C.I shows us that Java is more popular during the week (Interval is exclusively above 0). This was expected given the business feel around the Java community.
 
 <br>
 
-> Looking at the confidence intervals (C.I.) of the unpaired difference between the median number of java users on weekdays and the median number of java users on weekends **we can say at a 95% degree of confidence that the median of files edited by Java coders during the week is significantly bigger than the median of files edited by Java coders during the weekend**.  
+> Looking at the confidence intervals (C.I.) of the unpaired difference between java popularity on the week and java popularity during the weekend **we can say at a 95% degree of confidence that Java is more popular during the week than during the weekend**.  
 
 <br>
 
@@ -273,8 +287,8 @@ data %>%
              group=isWeekend, 
              fill=isWeekend)) + 
   geom_boxplot() + 
-  labs(x="", y="Number of users editing files") +
-  ggtitle("Python popularity weekday vs weekend") +
+  labs(x="", y="Number of editing users") +
+  ggtitle("Python popularity (weekday vs weekend)") +
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
         axis.ticks.x=element_blank())
@@ -310,17 +324,17 @@ python.weekend
 ```{r}
 df = data.frame(rbind(python.week, 
                       python.weekend[rownames(python.week),]))
-df$medida = c("python.week", "python.weekend")
+df$medida = c("PYTHON (Week)", "PYTHON (Weekend)")
 
 df %>% 
   ggplot(aes(x = medida, ymin = X2.5., ymax = X97.5.)) + 
   geom_errorbar(width = .2) +
-  labs(y= "Number of users editing files", x="Group")
+  labs(y= "Popularity", x="Group")
 ```
 
 <br>
 
->Looking at the confidence intervals (C.I.) for Python coders editions during the week and Python coders editions during the weekend **we can say at a 95% degree of confidence that there's a statistically significant difference between the median of files edited by Python coders during the week and the median of files edited by Python coders during the weekend.**  
+>Looking at the confidence intervals (C.I.) of Python popularity during the week and the weekend **we can say at a 95% degree of confidence that there's a statistically significant difference between Python popularity during the week and Python popularity during the weekend.**  
 
 <br>
 
@@ -328,7 +342,7 @@ df %>%
 
 <br>
 
-* Let's bootstrap the unpaired difference between the median number of python users on weekdays and the median number of python users on weekends.
+* Let's bootstrap the unpaired difference between Python popularity during the week and Python popularity during the weekend.
 
 <br>
 
@@ -350,12 +364,12 @@ data.frame(means.diff) %>%
   labs(x="")
 ```
 
-* The C.I shows us that Python coders work way more during the week (Interval is exclusively above 0). 
-  * The former was not unexpected to be honest, given that there's a whole business segment around Python despite its hypster vibes.
+* The C.I shows us that Python is more popular during the week (Interval is exclusively above 0). 
+  * The former was not unexpected to be honest, given that there's a whole business segment around Python despite its carefree vibes.
 
 <br>
 
-> Looking at the confidence intervals (C.I.) of the unpaired difference between the median number of Python users on weekdays and the median number of Python users on weekends **we can say at a 95% degree of confidence that the median of files edited by Python coders during the week is significantly bigger than the median of files edited by Python coders during the weekend**.  
+> Looking at the confidence interval (C.I.) of the unpaired difference between Python popularity during the week and Python popularity during weekends **we can say at a 95% degree of confidence that Python is significantly more popular during the week than during the weekend**.  
 
 <br>
 
@@ -383,6 +397,8 @@ data %>%
   labs(y="Number of users editing files")
 ```
 
+* In terms of **sample** we see more clearly that Pythonis more popular on weekends than Java.
+
 ### Inference on two samples
 
 ```{r, results='hold'}
@@ -392,22 +408,31 @@ cat(paste("\n\nPython on weekend days:\n"))
 python.weekend
 ```
 
+<br>
+<br>
+
 ```{r}
 df = data.frame(rbind(java.weekend, 
                       python.weekend[rownames(python.week),]))
-df$medida = c("java.weekend", "python.weekend")
+df$medida = c("JAVA (Weekend)", "PYTHON (Weekend)")
 
 df %>% 
   ggplot(aes(x = medida, ymin = X2.5., ymax = X97.5.)) + 
   geom_errorbar(width = .2) +
-  labs(y= "Number of users editing files", x="Group")
+  labs(y= "Popularity", x="Group")
 ```
+
+<br>
+
+>Looking at the confidence intervals (C.I.) of Java and Python popularity during the weekend **we can say at a 95% degree of confidence that there's a statistically significant difference between Java and Python popularity during the weekend.**  
+
+<br>
 
 ### Inference on the unpaired difference of two samples
 
 <br>
 
-* Let's bootstrap the unpaired difference between the median number of java and python users on weekends.
+* Let's bootstrap the unpaired difference between Java and Python popularity during the weekend.
 
 <br>
 
@@ -429,3 +454,9 @@ data.frame(means.diff) %>%
   geom_hline(yintercept = 0, colour = "darkorange") +
   labs(x="")
 ```
+
+<br>
+
+> Looking at the confidence intervals (C.I.) of the unpaired difference between Java and Python popularity during the weekend **we can say at a 95% degree of confidence Python is significantly more popular during the weekend than Java**.  
+
+<br>
