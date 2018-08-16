@@ -1,5 +1,6 @@
 ---
 title: "Analysis on Github commits (2016-2017)"
+subtitle: "Analysis with statistical inference on data about commits made to Github from 2016 to 2017"
 author: "José Benardi de Souza Nunes"
 date: 10/07/2018
 output:
@@ -14,7 +15,7 @@ output:
 
 <br>
 
-# Introdução
+# Introduction
 
 <br>
 
@@ -66,7 +67,7 @@ data %>%
 
 <br>
 
-* We will recreate a date object based on the dataframe columns (month_day, the_month, the_year) and from this date object deduce whether the day of that observation was a weekend day or not (**isWeekend**).
+* We will recreate a date object based on the data-frame columns (month_day, the_month, the_year) and from this date object deduce whether the day of that observation was a weekend day or not (**isWeekend**).
 
 ```{r}
 data %>%
@@ -94,7 +95,7 @@ data %>%
   labs(x="File extension",y="Number of editing users")
 ```
 
-* A lot of md and web related files (json, js, html) were commited on weekends. Looks like documenting and working on the front-end goes on during weekends, poor front-end developers...
+* A lot of md and web related files (json, js, html) were committed on weekends. Looks like documenting and working on the front-end goes on during weekends, poor front-end developers...
 
 <br>
 
@@ -114,7 +115,7 @@ data %>%
        x="Number of editing users")
 ```
 
-* We can see a sizable decrease in user's commits around January, this matches typical holydays.
+* We can see a sizable decrease in user's commits around January, this matches typical holidays.
 
 <br>
 
@@ -465,7 +466,7 @@ data.frame(means.diff) %>%
 <br>
 
 * The C.I shows us that Python is more popular than Java during the weekend (Interval is exclusively below 0).
-* Python has a much more carefree vibe to it than Java (which is heavily tied to a business enviroment). It comes as no surprise that people would rather use Python on the weekend.  
+* Python has a much more carefree vibe to it than Java (which is heavily tied to a business environment). It comes as no surprise that people would rather use Python on the weekend.  
 
 <br>
 
